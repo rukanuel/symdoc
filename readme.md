@@ -1,5 +1,5 @@
 # Symdoc
-An intelligent documentation tool for Symfony.
+An intelligent documentation generator for Symfony.
 
 > **⚠️ Important:**
 This project is currently in development and is not intended for production use!

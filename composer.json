@@ -1,6 +1,6 @@
 {
     "name": "symdoc/symdoc",
-    "description": "An intelligent documentation tool for Symfony.",
+    "description": "An intelligent documentation generator for Symfony.",
     "keywords": ["symfony", "documentation", "cli", "tool"],
     "type": "project",
     "license": "LGPL-2.1-only",
