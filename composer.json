@@ -3,7 +3,7 @@
     "description": "An intelligent documentation tool for Symfony.",
     "keywords": ["symfony", "documentation", "cli", "tool"],
     "type": "project",
-    "license": "MIT",
+    "license": "LGPL-2.1-only",
     "homepage": "https://symdoc.org",
     "support": {
         "issues": "https://github.com/rukanuel/symdoc/issues",
