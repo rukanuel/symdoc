@@ -1,9 +1,108 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+declare(strict_types=1);
 
-use Symdoc\Runner;
+/*
+ * This file is part of Symdoc.
+ *
+ * (c) Emanuel Rukavina <rukanuel@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-$runner = new Runner();
-$runner->run();
+if (!version_compare(PHP_VERSION, PHP_VERSION, '=')) {
+    fwrite(
+        STDERR,
+        sprintf(
+            '%s declares an invalid value for PHP_VERSION.' . PHP_EOL .
+                'This breaks fundamental functionality such as version_compare().' . PHP_EOL .
+                'Please use a different PHP interpreter.' . PHP_EOL,
+            PHP_BINARY
+        )
+    );
+
+    exit(1);
+}
+
+// Ensure the script requires at least PHP 8.1.0
+if (version_compare('8.1.0', PHP_VERSION, '>')) {
+    fwrite(
+        STDERR,
+        sprintf(
+            'This version of Symdoc requires PHP >= 8.1.' . PHP_EOL .
+                'You are using PHP %s (%s).' . PHP_EOL,
+            PHP_VERSION,
+            PHP_BINARY
+        )
+    );
+
+    exit(1);
+}
+
+// Define autoload path if available, with fallbacks for different environments
+$autoloadPaths = [
+    $GLOBALS['_composer_autoload_path'] ?? null,
+    __DIR__ . '/../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php'
+];
+
+$autoloadFound = false;
+foreach ($autoloadPaths as $path) {
+    if ($path && file_exists($path)) {
+        define('SYMDOC_COMPOSER_INSTALL', $path);
+        $autoloadFound = true;
+        break;
+    }
+}
+
+if (!$autoloadFound) {
+    fwrite(
+        STDERR,
+        'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
+            '    composer install' . PHP_EOL . PHP_EOL .
+            'Learn more at https://getcomposer.org/.' . PHP_EOL
+    );
+
+    exit(1);
+}
+
+require SYMDOC_COMPOSER_INSTALL;
+
+// Check for required PHP extensions
+$requiredExtensions = ['json', 'mbstring'];
+$unavailableExtensions = array_filter(
+    $requiredExtensions,
+    static fn($extension) => !extension_loaded($extension)
+);
+
+if (!empty($unavailableExtensions)) {
+    fwrite(
+        STDERR,
+        sprintf(
+            'Symdoc requires the "%s" extensions, but the "%s" %s not available.' . PHP_EOL,
+            implode('", "', $requiredExtensions),
+            implode('", "', $unavailableExtensions),
+            count($unavailableExtensions) === 1 ? 'extension is' : 'extensions are'
+        )
+    );
+
+    exit(1);
+}
+
+// Run the kernel
+use Symdoc\Kernel;
+use Symdoc\SymdocException;
+
+try {
+    $runner = new Kernel();
+    $runner->run();
+} catch (SymdocException $e) {
+    fwrite(STDERR, "Symdoc error: " . $e->getMessage() . PHP_EOL);
+    exit(1);
+} catch (Throwable $e) {
+    fwrite(STDERR, "An unexpected error occurred: " . $e->getMessage() . PHP_EOL);
+    exit(1);
+}

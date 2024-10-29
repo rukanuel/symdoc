@@ -1,9 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Symdoc.
+ *
+ * (c) Emanuel Rukavina <rukanuel@gmail.com>
+ *
+ * This source file is subject to the LGPL-2.1-only license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Symdoc;
 
-class Runner
+class Kernel
 {
+    /**
+     * 1. Deal with the .ini file, do we create it, or just load it (if create, no need to continue, create it and stop)
+     * 2. 
+     */
     public function run()
     {
         echo "Reading project files from current directory...\n";

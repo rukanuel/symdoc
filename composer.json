@@ -1,7 +1,13 @@
 {
     "name": "symdoc/symdoc",
     "description": "An intelligent documentation generator for Symfony.",
-    "keywords": ["symfony", "documentation", "cli", "tool"],
+    "keywords": [
+        "symfony",
+        "symdoc",
+        "documentation",
+        "cli",
+        "tool"
+    ],
     "type": "project",
     "license": "LGPL-2.1-only",
     "homepage": "https://symdoc.org",
@@ -20,6 +26,9 @@
             "email": "rukanuel@gmail.com"
         }
     ],
+    "require": {
+        "php": ">=8.1"
+    },
     "require-dev": {
         "phpunit/phpunit": "^10.0"
     },
@@ -27,5 +36,7 @@
         "optimize-autoloader": true,
         "sort-packages": true
     },
-    "bin": ["bin/symdoc"]
+    "bin": [
+        "bin/symdoc"
+    ]
 }
