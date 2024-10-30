@@ -15,21 +15,22 @@ namespace Symdoc;
 
 class Kernel
 {
-    /**
-     * 1. Deal with the .ini file, do we create it, or just load it (if create, no need to continue, create it and stop)
-     * 2. 
-     */
-    public function run()
+    private string $directory;
+    private string $configPath;
+    private $config;
+
+    public function __construct()
     {
-        echo "Reading project files from current directory...\n";
-        $configFilePath = getcwd() . '/symdoc.ini';
-        if (!file_exists($configFilePath)) {
-            echo "symdoc.ini not found. Creating a new one...\n";
-            file_put_contents($configFilePath, "[symdoc]\ncreated=" . date('Y-m-d H:i:s') . "\n");
-            echo "symdoc.ini created at $configFilePath\n";
-        } else {
-            echo "symdoc.ini already exists at $configFilePath\n";
-        }
+        $this->directory = getcwd();
+        $this->configPath = getcwd() . '/symdoc.ini';
+    }
+    public function run(): void
+    {
+        if (!file_exists($this->configPath)) {
+            mkdir(dirname($this->configPath), 0777, true);
+            copy(__DIR__ ."/resources/symdoc.ini", $this->configPath);
+        } 
+        $config = parse_ini_file($this->configPath);
         $directory = getcwd();
 
         $iterator = new \RecursiveIteratorIterator(
@@ -37,7 +38,7 @@ class Kernel
         );
 
         foreach ($iterator as $fileInfo) {
-            echo $fileInfo->getPathname() . PHP_EOL;
+            #echo $fileInfo->getPathname() . PHP_EOL;
         }
     }
 }

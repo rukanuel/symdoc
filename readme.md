@@ -6,7 +6,7 @@ This project is currently in development and is not intended for production use!
 It is here for testing and development purposes only.
 
 ## Installation
-Since SymDoc is still in development and there isn’t a stable version yet, you’ll need to tell Composer to allow unstable packages.
+Since Symdoc is still in development and there isn’t a stable version yet, you’ll need to tell Composer to allow unstable packages.
 
 1. **Require the package:**
 ```bash
