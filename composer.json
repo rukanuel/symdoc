@@ -8,7 +8,7 @@
         "cli",
         "tool"
     ],
-    "type": "project",
+    "type": "library",
     "license": "LGPL-2.1-only",
     "homepage": "https://symdoc.org",
     "support": {
