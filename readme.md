@@ -21,13 +21,13 @@ composer require symdoc/symdoc --dev --prefer-source --no-cache
 }
 ```
 
-3. **Install SymDoc:** Run the Composer update to install dependencies:
+3. **Install Symdoc:** Run the Composer update to install dependencies:
 ```bash
 composer update
 ```
 
 ## Usage
-Once installed, you can run SymDoc from the command line from the root directory using:
+Once installed, you can run Symdoc from the command line from the root directory using:
 ```bash
 vendor/bin/symdoc
 ```
