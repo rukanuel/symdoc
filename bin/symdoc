@@ -97,7 +97,7 @@ use Symdoc\Kernel;
 use Symdoc\SymdocException;
 
 try {
-    $runner = new Kernel();
+    $runner = new Kernel(array_slice($argv, 1));
     $runner->run();
 } catch (SymdocException $e) {
     fwrite(STDERR, "Symdoc error: " . $e->getMessage() . PHP_EOL);
