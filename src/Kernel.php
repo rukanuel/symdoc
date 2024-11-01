@@ -13,48 +13,71 @@ declare(strict_types=1);
 
 namespace Symdoc;
 
-class Kernel
+use Symdoc\SymdocException;
+
+class Kernel implements KernelInterface
 {
+    private const SYMDOC_VERSION = '/../version';
+    private const SYMDOC_INI = '/_resources/symdoc.ini';
     private string $directory;
     private string $configPath;
     private $config;
-    private array $args;
 
-    public function __construct(array $args = [])
+    public function __construct()
     {
-        $this->args = $args;
         $this->directory = getcwd();
-        $this->configPath = getcwd() . '/symdoc.ini';
+        $this->configPath = $this->directory . '/symdoc.ini';
     }
+
+    /**
+     * @throws SymdocException
+     */
     public function run(): void
     {
-        // Prepare for flags func.
-        foreach ($this->args as $arg) {
-            if ($arg === '--flag1') {
-                echo "Flag1 is set!" . PHP_EOL;
-            }
+        self::config();
 
-            if (str_starts_with($arg, '--flag2=')) {
-                $flag2Value = explode('=', $arg)[1];
-                echo "Flag2 is set with value: $flag2Value" . PHP_EOL;
-            }
-        }
-
-        // Make this into a class of its ow so it can be used across the project
-        if (!file_exists($this->configPath)) {
-            mkdir(dirname($this->configPath), 0777, true);
-            // TODO swith version with actual version
-            copy(__DIR__ . "/_resources/symdoc.ini", $this->configPath);
-        } 
-        $config = parse_ini_file($this->configPath);
-        $directory = getcwd();
+        $this->config = parse_ini_file($this->configPath);
 
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS)
+            new \RecursiveCallbackFilterIterator(
+                new \RecursiveDirectoryIterator($this->directory, \FilesystemIterator::SKIP_DOTS),
+                function ($current, $key, $iterator) {
+                    // Exclude the "vendor" and "var" directories
+                    return !in_array($current->getFilename(), ['vendor', 'var']);
+                }
+            )
         );
 
         foreach ($iterator as $fileInfo) {
-            #echo $fileInfo->getPathname() . PHP_EOL;
+            // Process each file as needed
+            echo $fileInfo->getPathname() . PHP_EOL;
+        }
+
+    }
+
+    /**
+     * Check if symdoc.ini file exists. If it does continue, if not, create it and return.
+     * @throws SymdocException
+     */
+    private function config(): void
+    {
+        if (!file_exists($this->configPath)) {
+            $configDir = dirname($this->configPath);
+            if (!is_dir($configDir) && !mkdir($configDir, 0777, true)) {
+                throw new SymdocException("Cannot create directory: $configDir");
+            }
+
+            $version = @trim(file_get_contents(__DIR__ . self::SYMDOC_VERSION))
+                ?: throw new SymdocException("Cannot read version.");
+            $configTemplate = @file_get_contents(__DIR__ . self::SYMDOC_INI)
+                ?: throw new SymdocException("Cannot load config template.");
+
+            $configContent = str_replace('%version%', $version, $configTemplate);
+            if (file_put_contents($this->configPath, $configContent) === false) {
+                throw new SymdocException("Cannot write config file: $this->configPath");
+            }
+
+            echo "\033[32m'symdoc.ini' created. Edit and re-run to generate documentation.\033[0m" . PHP_EOL;
         }
     }
 }

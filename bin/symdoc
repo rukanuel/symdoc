@@ -12,6 +12,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+use Symdoc\Kernel;
+use Symdoc\SymdocException;
+
 if (!version_compare(PHP_VERSION, PHP_VERSION, '=')) {
     fwrite(
         STDERR,
@@ -92,13 +95,9 @@ if (!empty($unavailableExtensions)) {
     exit(1);
 }
 
-// Run the kernel
-use Symdoc\Kernel;
-use Symdoc\SymdocException;
-
 try {
-    $runner = new Kernel(array_slice($argv, 1));
-    $runner->run();
+    $symdoc = new Kernel();
+    $symdoc->run();
 } catch (SymdocException $e) {
     fwrite(STDERR, "Symdoc error: " . $e->getMessage() . PHP_EOL);
     exit(1);
