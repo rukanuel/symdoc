@@ -20,6 +20,11 @@
             "Symdoc\\": "symdoc/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Symdoc\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Emanuel Rukavina",

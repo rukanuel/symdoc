@@ -1,6 +1,8 @@
 # Symdoc
 An intelligent documentation generator for Symfony.
 
+![CI](https://img.shields.io/github/actions/workflow/status/rukanuel/symdoc/ci.yml?label=CI)
+
 > **⚠️ Important:**
 This project is currently in development and is not intended for production use!
 It is here for testing and development purposes only.
