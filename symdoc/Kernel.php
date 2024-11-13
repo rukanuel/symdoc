@@ -18,9 +18,6 @@ use Symdoc\SymdocException;
 class Kernel implements KernelInterface
 {
     private static ?Kernel $instance = null;
-    private const SYMDOC_VERSION = '/../version';
-    private const SYMDOC_INI = '/_resources/symdoc.ini';
-    private const EXCLUDE_LIST = ['vendor', 'var', '.git', 'bin'];
 
     private string $directory;
     private string $configPath;
@@ -45,16 +42,22 @@ class Kernel implements KernelInterface
     {
         return $this->directory;
     }
-    public function getConfig(){
-        //TODO only log shit if config allows it
-        return $this->config;
+
+    public function getConfig($value = "")
+    {
+        if (!empty($value)) {
+            return isset($this->config[$value]) ? $this->config[$value] : null;
+        } else {
+            return $this->config;
+        }
     }
+
     /**
      * @throws SymdocException
      */
     public function run(): void
     {
-        self::config();
+        \Symdoc\Configuration::Configuration($this->configPath);
 
         $this->config = parse_ini_file($this->configPath);
 
@@ -67,7 +70,7 @@ class Kernel implements KernelInterface
                 function ($current, $key, $iterator) {
                     return !in_array(
                         $current->getFilename(),
-                        self::EXCLUDE_LIST
+                        Globals::EXCLUDE_LIST
                     );
                 }
             )
@@ -77,32 +80,6 @@ class Kernel implements KernelInterface
             // Process each file as needed
             echo $fileInfo->getPathname() . PHP_EOL;
             Logger::Log("Test");
-        }
-    }
-
-    /**
-     * Check if symdoc.ini file exists. If it does continue, if not, create it and return.
-     * @throws SymdocException
-     */
-    private function config(): void
-    {
-        if (!file_exists($this->configPath)) {
-            $configDir = dirname($this->configPath);
-            if (!is_dir($configDir) && !mkdir($configDir, 0777, true)) {
-                throw new SymdocException("Cannot create directory: $configDir");
-            }
-
-            $version = @trim(file_get_contents(__DIR__ . self::SYMDOC_VERSION))
-                ?: throw new SymdocException("Cannot read version.");
-            $configTemplate = @file_get_contents(__DIR__ . self::SYMDOC_INI)
-                ?: throw new SymdocException("Cannot load config template.");
-
-            $configContent = str_replace('%version%', $version, $configTemplate);
-            if (file_put_contents($this->configPath, $configContent) === false) {
-                throw new SymdocException("Cannot write config file: $this->configPath");
-            }
-
-            echo "\033[32m'symdoc.ini' created. Edit and re-run to generate documentation.\033[0m" . PHP_EOL;
         }
     }
 }

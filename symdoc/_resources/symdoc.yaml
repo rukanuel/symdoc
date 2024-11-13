@@ -1,0 +1,7 @@
+# config/routes.yaml
+when@dev:
+    symdoc:
+        path: /symdoc/{filepath}
+        controller: Symdoc\Controller::Controller
+        requirements:
+            filepath: ".*"

@@ -17,25 +17,24 @@ class Logger
 {
     private static string $logFile;
 
-    // Set the log file path when the class is first used
     public static function init(): void
     {
         self::$logFile = Kernel::getInstance()->getDirectory() . "/symdoc.log";
     }
 
-    // Log a message without a log level
     public static function Log(string $message): void
     {
-        // Ensure log file path is initialized
+        if (!Kernel::getInstance()->getConfig('ENABLE_LOGGING')) {
+            return;
+        }
+
         if (empty(self::$logFile)) {
             self::init();
         }
 
-        // Format the log message with a timestamp
         $timestamp = (new \DateTime())->format('Y-m-d H:i:s');
         $logMessage = "[$timestamp] $message" . PHP_EOL;
 
-        // Write the log message to the file
         file_put_contents(self::$logFile, $logMessage, FILE_APPEND);
     }
 }
