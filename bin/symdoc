@@ -96,8 +96,7 @@ if (!empty($unavailableExtensions)) {
 }
 
 try {
-    $symdoc = new Kernel();
-    $symdoc->run();
+    $symdoc = Kernel::getInstance()->run();
 } catch (SymdocException $e) {
     fwrite(STDERR, "Symdoc error: " . $e->getMessage() . PHP_EOL);
     exit(1);

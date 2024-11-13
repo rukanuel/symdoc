@@ -17,18 +17,38 @@ use Symdoc\SymdocException;
 
 class Kernel implements KernelInterface
 {
+    private static ?Kernel $instance = null;
     private const SYMDOC_VERSION = '/../version';
     private const SYMDOC_INI = '/_resources/symdoc.ini';
+    private const EXCLUDE_LIST = ['vendor', 'var', '.git', 'bin'];
+
     private string $directory;
     private string $configPath;
     private $config;
 
-    public function __construct()
+    private function __construct()
     {
         $this->directory = getcwd();
         $this->configPath = $this->directory . '/symdoc.ini';
     }
 
+    public static function getInstance(): Kernel
+    {
+        if (self::$instance === null) {
+            self::$instance = new Kernel();
+        }
+
+        return self::$instance;
+    }
+
+    public function getDirectory(): string
+    {
+        return $this->directory;
+    }
+    public function getConfig(){
+        //TODO only log shit if config allows it
+        return $this->config;
+    }
     /**
      * @throws SymdocException
      */
@@ -40,10 +60,15 @@ class Kernel implements KernelInterface
 
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveCallbackFilterIterator(
-                new \RecursiveDirectoryIterator($this->directory, \FilesystemIterator::SKIP_DOTS),
+                new \RecursiveDirectoryIterator(
+                    $this->directory,
+                    \FilesystemIterator::SKIP_DOTS
+                ),
                 function ($current, $key, $iterator) {
-                    // Exclude the "vendor" and "var" directories
-                    return !in_array($current->getFilename(), ['vendor', 'var']);
+                    return !in_array(
+                        $current->getFilename(),
+                        self::EXCLUDE_LIST
+                    );
                 }
             )
         );
@@ -51,8 +76,8 @@ class Kernel implements KernelInterface
         foreach ($iterator as $fileInfo) {
             // Process each file as needed
             echo $fileInfo->getPathname() . PHP_EOL;
+            Logger::Log("Test");
         }
-
     }
 
     /**
