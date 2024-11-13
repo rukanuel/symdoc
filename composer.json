@@ -32,7 +32,7 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "nikic/php-parser": "^5.3",
         "symfony/http-foundation": "^7.1",
         "symfony/mime": "^7.1"
