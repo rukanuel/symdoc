@@ -36,11 +36,13 @@ vendor/bin/symdoc
 
 When developing or contributing to **Symdoc**, the easiest way to work is by cloning the [Symfony Demo](https://github.com/symfony/demo) project and testing Symdoc locally within that project.
 
-1. **Clone the Symfony Demo Project**
-First, clone the [Symfony Demo](https://github.com/symfony/demo) repository.
+**1. Clone required projects**
 
-2. **Update `composer.json`**
-Add the following to the `repositories` section of your `composer.json`:
+First, clone the [Symdoc](https://github.com/rukanuel/symdoc) and [Symfony Demo](https://github.com/symfony/demo) repositories.
+
+**2. Update `composer.json`**
+
+Add the following to the `repositories` section of your `composer.json` in Symfony Demo:
 
 ```json
 "repositories": [
@@ -57,11 +59,13 @@ Then, in the require section, add Symdoc:
 }
 ```
 
-3. **Update Composer**
+**3. Update Composer**
+
 Run the following command to update your dependencies:
 ```bash
 composer update
 ```
 
-3. **Start Using Symdoc Locally**
+**4. Start Using Symdoc Locally**
+
 Now, you can start using **Symdoc** as you normally would. The demo project will now use your local version of Symdoc, allowing you to make real-time updates and test them instantly.
