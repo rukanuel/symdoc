@@ -46,4 +46,4 @@ For contributors and developers working on Symdoc:
 
 3. **Pull Requests**: All contributions are reviewed, and any changes with potential security implications are subjected to additional scrutiny.
 
-Thank you for helping us keep Symdoc secure for everyone!
+Thank you for helping me keep Symdoc secure for everyone!
