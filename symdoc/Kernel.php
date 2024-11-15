@@ -17,6 +17,8 @@ use Symdoc\SymdocException;
 
 class Kernel implements KernelInterface
 {
+    private const EXCLUDE_FROM_PROJECT = ['vendor', 'var', '.git', 'bin'];
+
     private static ?Kernel $instance = null;
 
     private string $directory;
@@ -70,16 +72,15 @@ class Kernel implements KernelInterface
                 function ($current, $key, $iterator) {
                     return !in_array(
                         $current->getFilename(),
-                        Globals::EXCLUDE_LIST
+                        self::EXCLUDE_FROM_PROJECT
                     );
                 }
             )
         );
 
         foreach ($iterator as $fileInfo) {
-            // Process each file as needed
             echo $fileInfo->getPathname() . PHP_EOL;
-            Logger::Log("Test");
+            //Logger::Log("Test");
         }
     }
 }

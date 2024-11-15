@@ -16,4 +16,7 @@ namespace Symdoc;
 interface KernelInterface
 {
     public function run();
+    public static function getInstance();
+    public function getDirectory();
+    public function getConfig();
 }

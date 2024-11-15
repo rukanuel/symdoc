@@ -15,16 +15,14 @@ namespace Symdoc;
 
 class SymdocException extends \Exception
 {
-    // Optional: Customize the exception message or add other properties as needed
     public function __construct($message = "An error occurred in Symdoc", $code = 0, \Throwable $previous = null)
     {
-        // Call the parent constructor to set the message, code, and previous exception
         parent::__construct($message, $code, $previous);
     }
 
-    // Optional: Custom string representation of the exception
     public function __toString()
     {
+        Logger::Log($this->message);
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }

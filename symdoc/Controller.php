@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Symdoc.
+ *
+ * (c) Emanuel Rukavina <rukanuel@gmail.com>
+ *
+ * This source file is subject to the LGPL-2.1-only license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Symdoc;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +32,7 @@ class Controller
         $fileContent = file_get_contents($fullPath);
 
         $mimeTypes = new MimeTypes();
-        $mimeType = $mimeTypes->guessMimeType($fullPath) ?? 'application/octet-stream';  // Default MIME type if not found
+        $mimeType = $mimeTypes->guessMimeType($fullPath) ?? 'application/octet-stream';
 
         $response = new Response($fileContent);
         $response->headers->set('Content-Type', $mimeType);
