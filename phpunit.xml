@@ -7,7 +7,7 @@
          convertDeprecationsToExceptions="true"
          beStrictAboutTestsThatDoNotTestAnything="false">
     <testsuites>
-        <testsuite name="PHPParser Test Suite">
+        <testsuite name="Symdoc Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
