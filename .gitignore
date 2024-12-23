@@ -2,3 +2,4 @@ vendor
 composer.lock
 /.idea/
 symdoc.ini
+.phpunit.result.cache
